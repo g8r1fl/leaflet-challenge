@@ -12,23 +12,26 @@ d3.json(queryUrl).then(function(data) {
 });
 
 function createMarkers(earthquakeData) {
+  
+  console.log(earthquakeData.length);
   // var quakeMarkers = [];
-  console.log(earthquakeData.features);
-  // for (var i = 0; i < data.features.length; i++) {
-  //   quakeMarkers.push(
-  //     L.circle(data.features.geometry.coordinates, {
-  //       stroke: false,
-  //       fillOpacity: 0.75,
-  //       color: "white",
-  //       fillColor: "white",
-  //       radius: data.features.geometry.coordinates[2]
-  //     }).bindPopup("<h3>" + data.features.properties.place + "</h3><hr><p>" + new Date(data.features.properties.time) + "<p/><p" + 
-  //     data.features.properties.mag + "</p>")
-  //   )
+  for (var i = 0; i < earthquakeData.length; i++) {
+    console.log(earthquakeData.features);
+    // quakeMarkers.push(
+    //   L.circle(earthquakeData.features.geometry.coordinates, {
+    //     stroke: false,
+    //     fillOpacity: 0.75,
+    //     color: "white",
+    //     fillColor: "white",
+    //     radius: earthquakeData.features.geometry.coordinates[2]
+    //   }).bindPopup("<h3>" + earthquakeData.features.properties.place + "</h3><hr><p>" + new Date(earthquakeData.features.properties.time) + "<p/><p" + 
+    //   earthquakeData.features.properties.mag + "</p>")
+    // )
     
-  // }
+  }
 
   // var earthquakes = L.layer(quakeMarkers);
+  // console.log(earthquakes);
   // createMap(earthquakes);
 }
 // function createFeatures(earthquakeData) {
