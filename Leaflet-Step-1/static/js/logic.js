@@ -10,6 +10,7 @@ d3.json(queryUrl).then(function(data) {
   // Once we get a response, send the data.features object to the createFeatures function
   createFeatures(data.features);
   console.log(data.features);
+  console.log(data.features.length);
 });
 
 function createFeatures(earthquakeData) {
@@ -19,6 +20,7 @@ function createFeatures(earthquakeData) {
   function onEachFeature(feature, layer) {
     layer.bindPopup("<h3>" + feature.properties.place +
       "</h3><hr><p>" + new Date(feature.properties.time) + "</p><p> Depth  " + feature.geometry.coordinates[2] + "</p>");
+      
   }
 
   // Create a GeoJSON layer containing the features array on the earthquakeData object
@@ -31,6 +33,24 @@ function createFeatures(earthquakeData) {
   // Sending our earthquakes layer to the createMap function
   createMap(earthquakes);
 }
+
+// create circle markers based on magnitudes
+// define array to hold morkers
+var quakeMarkers = []
+// loop through features and create circle markers
+for (var i=0; i < data.features.length; i++) {
+  quakeMarkers.push(
+    L.circle(data.features[i].geometry.coordinates, {
+      stroke: false,
+      fillOpacity: 0.75,
+      color: "yellow",
+      fillColor: "white",
+      radius: data.features[i].properties.mag
+    })
+  );
+  console.log("these are the circles: ", quakeMarkers);
+}
+
 
 function createMap(earthquakes) {
 
