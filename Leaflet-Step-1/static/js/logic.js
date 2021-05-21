@@ -41,11 +41,16 @@ d3.json(queryUrl).then(function(data) {
   console.log(data.features[0].geometry.coordinates.slice(0,2))
 
   //  add circles to map
+  var depth = [];
+  
+  
   for (var i = 0; i < data.features.length; i++) {
     // console.log(data.features[i].geometry.coordinates.slice(0,2));
     var lat = data.features[i].geometry.coordinates[1];
     var lon = data.features[i].geometry.coordinates[0];
-    console.log(data.features[i].geometry);
+    var deep = data.features[i].geometry.coordinates[2];
+    depth.push(data.features[i].geometry.coordinates[2]);
+    // console.log(getColor(deep));
     L.circle([lat, lon], {
       stroke: true,
       fillOpacity: 0.75,
@@ -55,8 +60,11 @@ d3.json(queryUrl).then(function(data) {
     }).bindPopup("<h3>" + data.features[i].properties.place + "</h3><hr><p>" + new Date(data.features[i].properties.time) + "<p/><p>" + 
     "Magnitude: " + data.features[i].properties.mag + "</p><p>" + "Depth: " + data.features[i].geometry.coordinates[2] + "</p>").addTo(myMap);
   }
-  var depth = data.features.forEach(elem => elem.features.coordinates[2]);
-  console.log(depth);
+  console.log(depth.length);
+  console.log(Math.min(...depth));
+  console.log(Math.max(...depth));
+  console.log(depth.filter(x => x>10<50).length);
+  
   // check here for coloring the circles and legend build https://leafletjs.com/examples/choropleth/
   function getColor(d) {
     return d > 90 ? '#800026' :
