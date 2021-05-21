@@ -52,7 +52,7 @@ d3.json(queryUrl).then(function(data) {
     depth.push(data.features[i].geometry.coordinates[2]);
     // console.log(getColor(deep));
     L.circle([lat, lon], {
-      stroke: true,
+      stroke: false,
       fillOpacity: 0.75,
       color: "red",
       fillColor: getColor(data.features[i].geometry.coordinates[2]),
@@ -63,19 +63,39 @@ d3.json(queryUrl).then(function(data) {
   console.log(depth.length);
   console.log(Math.min(...depth));
   console.log(Math.max(...depth));
-  console.log(depth.filter(x => x>10<50).length);
+  console.log(depth.filter(x => x>10 && x <50).length);
   
   // check here for coloring the circles and legend build https://leafletjs.com/examples/choropleth/
   function getColor(d) {
-    return d > 90 ? '#800026' :
-           d > 70  ? '#BD0026' :
-           d > 50  ? '#E31A1C' :
-           d > 30  ? '#FC4E2A' :
-           d > 10   ? '#FD8D3C' :
-           d > -10   ? '#FEB24C' :
-           d > -20   ? '#FED976' :
-                      '#FFEDA0';
+    return d > 90 ? '#9E1213' : //dark red
+           d > 70  ? '#F00030' : //bright red
+           d > 50  ? '#FEB24C' ://orange 
+           d > 30  ? '#f0fc2a' ://yellow 
+           d > 10   ? '#1aabe3' ://light blue
+           d > -10   ? '#c8eebc' : // light green 
+                      '#48c921'; //bright green
 };
+
+// create legend
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [-10, 10, 30, 50, 70, 90],
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(myMap);
 
     // Pass our map layers into our layer control
   // Add the layer control to the map
