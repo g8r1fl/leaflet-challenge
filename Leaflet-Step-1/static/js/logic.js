@@ -12,7 +12,7 @@ d3.json(queryUrl).then(function(data) {
     tileSize: 512,
     maxZoom: 18,
     zoomOffset: -1,
-    id: "mapbox/streets-v11",
+    id: "mapbox/light-v10",
     accessToken: API_KEY
   });
   
@@ -49,18 +49,29 @@ d3.json(queryUrl).then(function(data) {
       stroke: true,
       fillOpacity: 0.75,
       color: "red",
-      fillColor: "white",
-      radius: data.features[i].geometry.coordinates[2] * 2000
-    }).bindPopup("<h3>" + data.features[i].properties.place + "</h3><hr><p>" + new Date(data.features[i].properties.time) + "<p/><p" + 
-    data.features[i].properties.mag + "</p>").addTo(myMap);
+      fillColor: "yellow",
+      radius: data.features[i].properties.mag * 10000
+    }).bindPopup("<h3>" + data.features[i].properties.place + "</h3><hr><p>" + new Date(data.features[i].properties.time) + "<p/><p>" + 
+    "Magnitude: " + data.features[i].properties.mag + "</p><p>" + "Depth: " + data.features[i].geometry.coordinates[2] + "</p>").addTo(myMap);
   }
 
+  // check here for coloring the circles and legend build https://leafletjs.com/examples/choropleth/
+  function getColor(d) {
+    return d > 1000 ? '#800026' :
+           d > 500  ? '#BD0026' :
+           d > 200  ? '#E31A1C' :
+           d > 100  ? '#FC4E2A' :
+           d > 50   ? '#FD8D3C' :
+           d > 20   ? '#FEB24C' :
+           d > 10   ? '#FED976' :
+                      '#FFEDA0';
+}
 
     // Pass our map layers into our layer control
   // Add the layer control to the map
-  // L.control.layers(baseMaps, {
-  //   collapsed: false
-  // }).addTo(myMap);
+  L.control.layers(baseMaps, {
+    collapsed: true
+  }).addTo(myMap);
 });
 
 
