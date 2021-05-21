@@ -1,12 +1,12 @@
 // start with 17-1 Ex10 activity as template
 
 // Store our API endpoint inside queryUrl
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl).then(function(data) {
   // Once we get a response, send the data.features object to the createFeatures function;
-  console.log(data.features.length);
+  console.log("There are " +data.features.length + " features in this api.");
   var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
@@ -45,8 +45,8 @@ d3.json(queryUrl).then(function(data) {
     zoom: 5,
     layers: [lightmap]
   });
-  console.log(data.features[0].geometry);
-  console.log(data.features[0].geometry.coordinates.slice(0,2))
+  // console.log(data.features[0].geometry);
+  // console.log(data.features[0].geometry.coordinates.slice(0,2))
 
   //  add circles to map
   var depth = [];
@@ -68,10 +68,10 @@ d3.json(queryUrl).then(function(data) {
     }).bindPopup("<h3>" + data.features[i].properties.place + "</h3><hr><p>" + new Date(data.features[i].properties.time) + "<p/><p>" + 
     "Magnitude: " + data.features[i].properties.mag + "</p><p>" + "Depth: " + data.features[i].geometry.coordinates[2] + "</p>").addTo(myMap);
   }
-  console.log(depth.length);
-  console.log(Math.min(...depth));
-  console.log(Math.max(...depth));
-  console.log(depth.filter(x => x>10 && x <50).length);
+  
+  console.log("The minimum depth in this dataset is: ", Math.min(...depth));
+  console.log("The maximum depth in this dataset is: ", Math.max(...depth));
+  // console.log(depth.filter(x => x>10 && x <50).length);
   
   // check here for coloring the circles and legend build https://leafletjs.com/examples/choropleth/
   function getColor(d) {
@@ -82,12 +82,12 @@ d3.json(queryUrl).then(function(data) {
            d > 10   ? '#1aabe3' ://light blue
            d > -10   ? '#c8eebc' : // light green 
                       '#48c921'; //bright green
-};
+  };
 
-// create legend
-var legend = L.control({position: 'bottomright'});
+  // create legend
+  var legend = L.control({position: 'bottomright'});
 
-legend.onAdd = function (map) {
+  legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
         grades = [-10, 10, 30, 50, 70, 90],
@@ -101,12 +101,12 @@ legend.onAdd = function (map) {
     }
 
     return div;
-};
+  };
 
-legend.addTo(myMap);
+  legend.addTo(myMap);
 
-    // Pass our map layers into our layer control
-  // Add the layer control to the map
+  // Pass our map layers into our layer control
+// Add the layer control to the map
   L.control.layers(baseMaps, {
     collapsed: false
   }).addTo(myMap);
