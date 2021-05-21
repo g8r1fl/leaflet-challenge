@@ -6,55 +6,76 @@ var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_da
 // Perform a GET request to the query URL
 d3.json(queryUrl).then(function(data) {
   // Once we get a response, send the data.features object to the createFeatures function
-  createFeatures(data.features);
+  // createFeatures(data.features);
+  createMarkers(data.features);
   console.log(data.features);
 });
 
-function createFeatures(earthquakeData) {
-
-  var quakeMarkers = [];
-
-  for (var i = 0; i < features.length; i++) {
-    quakeMarkers.push(
-      L.circle(features.geometry.coordinates, {
-        stroke: false,
-        fillOpacity: 0.75,
-        color: "white",
-        fillColor: "white",
-        radius: features.geometry.coordinates[2]
-      }).bindPopup("<h3>" + features.properties.place + "</h3><hr><p>" + new Date(features.properties.time) + "<p/><p" + 
-      features.properties.mag + "</p>")
-    )
+function createMarkers(earthquakeData) {
+  // var quakeMarkers = [];
+  console.log(earthquakeData.features);
+  // for (var i = 0; i < data.features.length; i++) {
+  //   quakeMarkers.push(
+  //     L.circle(data.features.geometry.coordinates, {
+  //       stroke: false,
+  //       fillOpacity: 0.75,
+  //       color: "white",
+  //       fillColor: "white",
+  //       radius: data.features.geometry.coordinates[2]
+  //     }).bindPopup("<h3>" + data.features.properties.place + "</h3><hr><p>" + new Date(data.features.properties.time) + "<p/><p" + 
+  //     data.features.properties.mag + "</p>")
+  //   )
     
-  }
+  // }
 
-  var earthquakes = L.layer(quakeMarkers);
-
-  // // Define a function we want to run once for each feature in the features array
-  // // Give each feature a popup describing the place and time of the earthquake
-  // function onEachFeature(feature, layer) {
-  //   // create circle markers based on magnitudes
-  //   // loop through features and create circle markers
-  //   L.circle(feature.geometry.coordinates, {
-  //     stroke: false,
-  //     fillOpacity: 0.75,
-  //     color: "yellow",
-  //     fillColor: "white",
-  //     radius: feature.properties.mag
-  //   }).bindPopup("<h3>" + feature.properties.place +
-  //   "</h3><hr><p>" + new Date(feature.properties.time) + "</p><p> Depth  " + feature.geometry.coordinates[2] + "</p>");
-  // };
-
-  // // Create a GeoJSON layer containing the features array on the earthquakeData object
-  // // Run the onEachFeature function once for each piece of data in the array
-  // var earthquakes = L.geoJSON(earthquakeData, {
-  //   onEachFeature: onEachFeature
-  // });
-  // console.log(earthquakes);
-
-  // Sending our earthquakes layer to the createMap function
-  createMap(earthquakes);
+  // var earthquakes = L.layer(quakeMarkers);
+  // createMap(earthquakes);
 }
+// function createFeatures(earthquakeData) {
+
+//   var quakeMarkers = [];
+
+//   for (var i = 0; i < data.features.length; i++) {
+//     quakeMarkers.push(
+//       L.circle(data.features.geometry.coordinates, {
+//         stroke: false,
+//         fillOpacity: 0.75,
+//         color: "white",
+//         fillColor: "white",
+//         radius: data.features.geometry.coordinates[2]
+//       }).bindPopup("<h3>" + data.features.properties.place + "</h3><hr><p>" + new Date(data.features.properties.time) + "<p/><p" + 
+//       data.features.properties.mag + "</p>")
+//     )
+    
+//   }
+
+//   var earthquakes = L.layer(quakeMarkers);
+
+//   // // Define a function we want to run once for each feature in the features array
+//   // // Give each feature a popup describing the place and time of the earthquake
+//   // function onEachFeature(feature, layer) {
+//   //   // create circle markers based on magnitudes
+//   //   // loop through features and create circle markers
+//   //   L.circle(feature.geometry.coordinates, {
+//   //     stroke: false,
+//   //     fillOpacity: 0.75,
+//   //     color: "yellow",
+//   //     fillColor: "white",
+//   //     radius: feature.properties.mag
+//   //   }).bindPopup("<h3>" + feature.properties.place +
+//   //   "</h3><hr><p>" + new Date(feature.properties.time) + "</p><p> Depth  " + feature.geometry.coordinates[2] + "</p>");
+//   // };
+
+//   // // Create a GeoJSON layer containing the features array on the earthquakeData object
+//   // // Run the onEachFeature function once for each piece of data in the array
+//   // var earthquakes = L.geoJSON(earthquakeData, {
+//   //   onEachFeature: onEachFeature
+//   // });
+//   // console.log(earthquakes);
+
+//   // Sending our earthquakes layer to the createMap function
+//   createMap(earthquakes);
+// }
 
 
 
@@ -70,7 +91,7 @@ function createMap(earthquakes) {
     id: "mapbox/light-v10",
     accessToken: API_KEY
   });
-  console.log(earthquakes)
+  
 
   var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -96,7 +117,8 @@ function createMap(earthquakes) {
       37.09, -95.71
     ],
     zoom: 5,
-    layers: [streetmap, earthquakes]
+    layers: [streetmap]
+    // layers: [streetmap, earthquakes]
   });
 
   // Create a layer control
