@@ -23,7 +23,8 @@ d3.json(queryUrl).then(function(data) {
         radius: data.features[i].properties.mag
       })
     );
-  }
+  };
+  createMap(quakeMarkers);
   console.log("these are the circles: ", quakeMarkers);
 
   console.log(data.features);
@@ -54,7 +55,7 @@ function createFeatures(earthquakeData) {
 
 
 
-function createMap(earthquakes) {
+function createMap(earthquakes, quakeMarkers) {
 
   // Define streetmap and darkmap layers
   var streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -81,7 +82,8 @@ function createMap(earthquakes) {
 
   // Create overlay object to hold our overlay layer
   var overlayMaps = {
-    Earthquakes: earthquakes
+    Earthquakes: earthquakes,
+    QuakeMarkers: quakeMarkers
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
