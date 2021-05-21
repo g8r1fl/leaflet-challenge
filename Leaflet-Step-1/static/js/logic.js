@@ -14,25 +14,25 @@ d3.json(queryUrl).then(function(data) {
 function createMarkers(earthquakeData) {
   
   console.log(earthquakeData.length);
-  // var quakeMarkers = [];
+  var quakeMarkers = [];
   for (var i = 0; i < earthquakeData.length; i++) {
-    console.log(earthquakeData.features);
-    // quakeMarkers.push(
-    //   L.circle(earthquakeData.features.geometry.coordinates, {
-    //     stroke: false,
-    //     fillOpacity: 0.75,
-    //     color: "white",
-    //     fillColor: "white",
-    //     radius: earthquakeData.features.geometry.coordinates[2]
-    //   }).bindPopup("<h3>" + earthquakeData.features.properties.place + "</h3><hr><p>" + new Date(earthquakeData.features.properties.time) + "<p/><p" + 
-    //   earthquakeData.features.properties.mag + "</p>")
-    // )
+    console.log(earthquakeData[i].properties.mag);
+    quakeMarkers.push(
+      L.circle(earthquakeData[i].features.geometry.coordinates, {
+        stroke: false,
+        fillOpacity: 0.75,
+        color: "white",
+        fillColor: "white",
+        radius: earthquakeData[i].features.geometry.coordinates[2]
+      }).bindPopup("<h3>" + earthquakeData[i].features.properties.place + "</h3><hr><p>" + new Date(earthquakeData[i].features.properties.time) + "<p/><p" + 
+      earthquakeData[i].features.properties.mag + "</p>")
+    )
     
   }
 
-  // var earthquakes = L.layer(quakeMarkers);
-  // console.log(earthquakes);
-  // createMap(earthquakes);
+  var earthquakes = L.layer(quakeMarkers);
+  console.log(earthquakes);
+  createMap(earthquakes);
 }
 // function createFeatures(earthquakeData) {
 
