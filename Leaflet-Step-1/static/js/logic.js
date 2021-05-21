@@ -9,6 +9,23 @@ var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_da
 d3.json(queryUrl).then(function(data) {
   // Once we get a response, send the data.features object to the createFeatures function
   createFeatures(data.features);
+  // create circle markers based on magnitudes
+  // define array to hold morkers
+  var quakeMarkers = []
+  // loop through features and create circle markers
+  for (var i=0; i < data.features.length; i++) {
+    quakeMarkers.push(
+      L.circle(data.features[i].geometry.coordinates, {
+        stroke: false,
+        fillOpacity: 0.75,
+        color: "yellow",
+        fillColor: "white",
+        radius: data.features[i].properties.mag
+      })
+    );
+  }
+  console.log("these are the circles: ", quakeMarkers);
+
   console.log(data.features);
   console.log(data.features.length);
 });
@@ -28,28 +45,13 @@ function createFeatures(earthquakeData) {
   var earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature
   });
-  console.log(earthquakes)
+  console.log(earthquakes);
 
   // Sending our earthquakes layer to the createMap function
   createMap(earthquakes);
 }
 
-// create circle markers based on magnitudes
-// define array to hold morkers
-var quakeMarkers = []
-// loop through features and create circle markers
-for (var i=0; i < data.features.length; i++) {
-  quakeMarkers.push(
-    L.circle(data.features[i].geometry.coordinates, {
-      stroke: false,
-      fillOpacity: 0.75,
-      color: "yellow",
-      fillColor: "white",
-      radius: data.features[i].properties.mag
-    })
-  );
-  console.log("these are the circles: ", quakeMarkers);
-}
+
 
 
 function createMap(earthquakes) {
