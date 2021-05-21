@@ -15,3 +15,6 @@ In the end I decided to do all of the coding within the d3.json call of the api 
 
 I was able to finalize and complete step 1 of the challenge but wasn't able to have the layer control.  I continuosly recieved errors and it wouldn't load.  Since I'm behind on homework assignments I am submitting it as is and will try to sort out the error for the bonus later.
 
+# Live version
+
+[Howard's Quake Page](https://g8r1fl.github.io/leaflet-challenge/)
