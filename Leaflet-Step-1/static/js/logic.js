@@ -45,27 +45,29 @@ d3.json(queryUrl).then(function(data) {
     // console.log(data.features[i].geometry.coordinates.slice(0,2));
     var lat = data.features[i].geometry.coordinates[1];
     var lon = data.features[i].geometry.coordinates[0];
+    console.log(data.features[i].geometry);
     L.circle([lat, lon], {
       stroke: true,
       fillOpacity: 0.75,
       color: "red",
-      fillColor: "yellow",
+      fillColor: getColor(data.features[i].geometry.coordinates[2]),
       radius: data.features[i].properties.mag * 10000
     }).bindPopup("<h3>" + data.features[i].properties.place + "</h3><hr><p>" + new Date(data.features[i].properties.time) + "<p/><p>" + 
     "Magnitude: " + data.features[i].properties.mag + "</p><p>" + "Depth: " + data.features[i].geometry.coordinates[2] + "</p>").addTo(myMap);
   }
-
+  var depth = data.features.forEach(elem => elem.features.coordinates[2]);
+  console.log(depth);
   // check here for coloring the circles and legend build https://leafletjs.com/examples/choropleth/
   function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
+    return d > 90 ? '#800026' :
+           d > 70  ? '#BD0026' :
+           d > 50  ? '#E31A1C' :
+           d > 30  ? '#FC4E2A' :
+           d > 10   ? '#FD8D3C' :
+           d > -10   ? '#FEB24C' :
+           d > -20   ? '#FED976' :
                       '#FFEDA0';
-}
+};
 
     // Pass our map layers into our layer control
   // Add the layer control to the map
