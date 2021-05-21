@@ -6,13 +6,13 @@ var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_da
 // Perform a GET request to the query URL
 d3.json(queryUrl).then(function(data) {
   // Once we get a response, send the data.features object to the createFeatures function;
-  console.log(data.features);
+  console.log(data.features.length);
   var streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
     maxZoom: 18,
     zoomOffset: -1,
-    id: "mapbox/light-v10",
+    id: "mapbox/streets-v11",
     accessToken: API_KEY
   });
   
@@ -37,19 +37,22 @@ d3.json(queryUrl).then(function(data) {
     zoom: 5,
     layers: [streetmap]
   });
+  console.log(data.features[0].geometry);
+  console.log(data.features[0].geometry.coordinates.slice(0,2))
 
   //  add circles to map
-  for (var i = 0; i < features.length; i++) {
-    console.log(features[i].geometry.coordinates[2]);
-    
-    L.circle(features[i].geometry.coordinates, {
+  for (var i = 0; i < data.features.length; i++) {
+    // console.log(data.features[i].geometry.coordinates.slice(0,2));
+    var lat = data.features[i].geometry.coordinates[1];
+    var lon = data.features[i].geometry.coordinates[0];
+    L.circle([lat, lon], {
       stroke: true,
       fillOpacity: 0.75,
       color: "red",
       fillColor: "white",
-      radius: features[i].geometry.coordinates[2] * 2000
-    }).bindPopup("<h3>" + features[i].properties.place + "</h3><hr><p>" + new Date(features[i].properties.time) + "<p/><p" + 
-    features[i].properties.mag + "</p>").addTo(myMap);
+      radius: data.features[i].geometry.coordinates[2] * 2000
+    }).bindPopup("<h3>" + data.features[i].properties.place + "</h3><hr><p>" + new Date(data.features[i].properties.time) + "<p/><p" + 
+    data.features[i].properties.mag + "</p>").addTo(myMap);
   }
 
 
