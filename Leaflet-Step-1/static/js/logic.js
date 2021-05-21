@@ -16,21 +16,21 @@ function createMarkers(earthquakeData) {
   console.log(earthquakeData.length);
   var quakeMarkers = [];
   for (var i = 0; i < earthquakeData.length; i++) {
-    console.log(earthquakeData[i].properties.mag);
+    // console.log(earthquakeData[i].properties.mag);
     quakeMarkers.push(
-      L.circle(earthquakeData[i].features.geometry.coordinates, {
-        stroke: false,
+      L.circle(earthquakeData[i].geometry.coordinates, {
+        // stroke: false,
         fillOpacity: 0.75,
-        color: "white",
+        color: "red",
         fillColor: "white",
-        radius: earthquakeData[i].features.geometry.coordinates[2]
-      }).bindPopup("<h3>" + earthquakeData[i].features.properties.place + "</h3><hr><p>" + new Date(earthquakeData[i].features.properties.time) + "<p/><p" + 
-      earthquakeData[i].features.properties.mag + "</p>")
+        radius: earthquakeData[i].geometry.coordinates[2]
+      }).bindPopup("<h3>" + earthquakeData[i].properties.place + "</h3><hr><p>" + new Date(earthquakeData[i].properties.time) + "<p/><p" + 
+      earthquakeData[i].properties.mag + "</p>")
     )
     
   }
 
-  var earthquakes = L.layer(quakeMarkers);
+  var earthquakes = L.layerGroup(quakeMarkers);
   console.log(earthquakes);
   createMap(earthquakes);
 }
@@ -85,6 +85,8 @@ function createMarkers(earthquakeData) {
 
 function createMap(earthquakes) {
 
+  console.log(earthquakes[0]);
+
   // Define streetmap and darkmap layers
   var streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
@@ -111,7 +113,7 @@ function createMap(earthquakes) {
 
   // Create overlay object to hold our overlay layer
   var overlayMaps = {
-    Earthquakes: earthquakes
+    "Earthquakes": earthquakes
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
